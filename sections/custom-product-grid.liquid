@@ -1,0 +1,66 @@
+{% comment %}
+Custom Product Grid (NEW) — Grid with 6 selectable products from the customizer.
+Includes hidden Quick View modal handled by /assets/custom.js
+Also includes setting to pick the "Soft Winter Jacket" upsell product whose variant gets auto-added
+when user chooses a variant that includes both "Black" and "Medium".
+{% endcomment %}
+
+{%- assign upsell_variant_id = 0 -%}
+{%- if section.settings.upsell_product != blank -%}
+  {%- assign upsell_variant_id = section.settings.upsell_product.selected_or_first_available_variant.id -%}
+{%- endif -%}
+
+<section class="custom-container" data-section="custom-product-grid" data-upsell-variant="{{ upsell_variant_id }}">
+  <div class="product-grid">
+    {%- for block in section.blocks -%}
+      {%- assign p = block.settings.product -%}
+      {%- if p != blank -%}
+        <article class="product-card" {{ block.shopify_attributes }}>
+          {%- if p.featured_image -%}
+            <img src="{{ p.featured_image | image_url: width: 800 }}" 
+                 alt="{{ p.title | escape }}" 
+                 width="800" height="800" loading="lazy">
+          {%- endif -%}
+          <div class="pc-body">
+            <h3>{{ p.title }}</h3>
+            <div class="price">
+              {%- if p.selected_or_first_available_variant -%}
+                {{ p.selected_or_first_available_variant.price | money }}
+              {%- endif -%}
+            </div>
+            <div>
+              <button class="btn" data-quick data-handle="{{ p.handle }}">Quick view</button>
+            </div>
+          </div>
+        </article>
+      {%- else -%}
+        <article class="product-card" {{ block.shopify_attributes }}>
+          <div class="pc-body">
+            <h3>Pick a product</h3>
+          </div>
+        </article>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Custom Product Grid (NEW)",
+  "tag": "section",
+  "settings": [
+    { "type": "product", "id": "upsell_product", "label": "Upsell product to auto-add (Soft Winter Jacket)" }
+  ],
+  "blocks": [
+    { 
+      "type": "card", 
+      "name": "Product", 
+      "settings": [ 
+        { "type": "product", "id": "product", "label": "Select product" } 
+      ] 
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [{ "name": "Custom Product Grid (NEW)" }]
+}
+{% endschema %}
