@@ -1,0 +1,47 @@
+{% comment %} New, from scratch — Banner with editable texts and animated buttons {% endcomment %}
+<section class="banner-wrap custom-banner" data-section="custom-banner">
+  <div class="banner-content">
+    <h1>{{ section.settings.heading | escape }}</h1>
+    
+    {% if section.settings.subheading != blank %}
+      <p>{{ section.settings.subheading }}</p>
+    {% endif %}
+    
+    <div class="banner-cta">
+      {% if section.settings.btn1_label != blank %}
+        <a class="btn btn-primary" href="{{ section.settings.btn1_link }}">{{ section.settings.btn1_label }}</a>
+      {% endif %}
+      {% if section.settings.btn2_label != blank %}
+        <a class="btn btn-secondary" href="{{ section.settings.btn2_link }}">{{ section.settings.btn2_label }}</a>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if section.settings.image %}
+    <div class="banner-image">
+      <img 
+        src="{{ section.settings.image | image_url: width: 1200 }}" 
+        alt="{{ section.settings.heading | escape }}" 
+        width="{{ section.settings.image.width }}" 
+        height="{{ section.settings.image.height }}" 
+        loading="eager">
+    </div>
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "Custom Banner (NEW)",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Banner headline" },
+    { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "Supporting copy goes here." },
+    { "type": "image_picker", "id": "image", "label": "Banner image" },
+    { "type": "text", "id": "btn1_label", "label": "Primary button label", "default": "Shop now" },
+    { "type": "url",  "id": "btn1_link",  "label": "Primary button link" },
+    { "type": "text", "id": "btn2_label", "label": "Secondary button label", "default": "Learn more" },
+    { "type": "url",  "id": "btn2_link",  "label": "Secondary button link" }
+  ],
+  "presets": [{ "name": "Custom Banner (NEW)" }]
+}
+{% endschema %}
